@@ -1,4 +1,5 @@
 using LearnAngular.API.Data;
+using LearnAngular.API.Models.Settings;
 using LearnAngular.API.Repositories.Implementation;
 using LearnAngular.API.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,15 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var mongoDBSettings = builder.Configuration.GetSection("MongoDBSettings").Get<MongoDBSettings>();
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDBSettings"));
+builder.Services.AddDbContext<MongoDbContext>(options => 
+{
+    options.UseMongoDB(mongoDBSettings.AtlasURI ?? "", mongoDBSettings.DatabaseName ?? "");
+});
+// Enable CORS for all origins, methods, and headers
+// Add CORS policy to allow all origins, methods, and headers
 
 //Amar Panray's addition
 builder.Services.AddDbContext<ApplicationDbContext>(options => { 
