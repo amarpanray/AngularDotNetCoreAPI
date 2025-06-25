@@ -16,6 +16,7 @@ Also, this is a public repository, so feel free to use any parts of it for your 
 
 **Technologies & Skills in this app:** <br>
 - .Net Core and c-sharp (.net 8.0)
+- Object-Oriented Programming following the SOLID principles.
 - Service Oriented Architecture
 - Dependency Injection
 - Repository Pattern
