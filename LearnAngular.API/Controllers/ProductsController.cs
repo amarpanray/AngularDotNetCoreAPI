@@ -4,6 +4,7 @@ using LearnAngular.API.Models.DTO;
 using LearnAngular.API.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace LearnAngular.API.Controllers
@@ -12,26 +13,24 @@ namespace LearnAngular.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        public IProductRepository ProductRepository { get; }
+        public IProductRepository _productRepository { get; }
 
-
-        // This is a placeholder for the ProductsController.
-        // You can implement methods to handle HTTP requests related to products here.
-        // For example, you might have methods for getting, creating, updating, and deleting products.
+        //Same as above, but using a read-only property
+        //public readonly IProductRepository ProductRepository;
 
         public ProductsController(IProductRepository productRepository)
         {
-            ProductRepository = productRepository;
+            _productRepository = productRepository;
         }
 
-        [HttpGet]
-        public IActionResult GetProducts()
-        {
-            return Ok("This will return a list of products.");
-        }
+       
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequestDTO request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             //Map Domain Object to Data Transfer Object (DTO)
             var product = new Product
             {
@@ -46,8 +45,8 @@ namespace LearnAngular.API.Controllers
             };
 
             //Abstracting this task to the repository layer
-            //by taking advantage of the Unit of Work pattern
-            await ProductRepository.CreateAsync(product);
+            //Unit of Work pattern
+            await _productRepository.CreateAsync(product);
 
             //Map DTO back to Domain Object
             var response = new ProductDTO
@@ -61,6 +60,63 @@ namespace LearnAngular.API.Controllers
                 UpdatedDate = product.UpdatedDate,
                 IsActive = product.IsActive,
                 CreatedBy = product.CreatedBy
+            };
+
+            return Ok(response);
+        }
+
+        // GET: api/products
+        [HttpGet]
+        public async Task<IActionResult> GetAllProducts()
+        {
+            var products = await _productRepository.GetAllAsync();
+
+            //Map Domain Object to Data Transfer Object (DTO)
+            var response = new List<ProductDTO>();
+            foreach (var product in products)
+            {
+                response.Add(new ProductDTO
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    ImageUrl = product.ImageUrl,
+                    CreatedDate = product.CreatedDate,
+                    UpdatedDate = product.UpdatedDate,
+                    IsActive = product.IsActive,
+                    CreatedBy = product.CreatedBy
+                });
+            }
+
+            return Ok(response);
+        }
+
+
+        //GET: api/products/{id}//
+        //example: 'https://localhost:7004/api/Products/294ece55-c465-483f-3543-08ddadee43ce'
+        [HttpGet]
+        [Route("{id:Guid}")] //use type safety 
+        public async Task<IActionResult?> GetProductById([FromRoute] Guid id)
+        {
+            var existingProduct = await _productRepository.GetByIdAsync(id);
+
+            if (existingProduct is null)
+            {
+                return NotFound($"Product with id {id} not found.");
+            }
+
+            var response = new ProductDTO
+            {
+                Id = existingProduct.Id,
+                Name = existingProduct.Name,
+                Description = existingProduct.Description,
+                Price = existingProduct.Price,
+                ImageUrl = existingProduct.ImageUrl,
+                CreatedDate = existingProduct.CreatedDate,
+                UpdatedDate = existingProduct.UpdatedDate,
+                IsActive = existingProduct.IsActive,
+                CreatedBy = existingProduct.CreatedBy
             };
 
             return Ok(response);

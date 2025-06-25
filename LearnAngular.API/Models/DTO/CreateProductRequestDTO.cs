@@ -1,7 +1,10 @@
-﻿namespace LearnAngular.API.Models.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LearnAngular.API.Models.DTO
 {
     public class CreateProductRequestDTO
     {
+        [Required(ErrorMessage ="Product name not provided.")]
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; }
