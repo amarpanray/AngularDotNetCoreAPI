@@ -23,7 +23,7 @@ namespace LearnAngular.API.Controllers
             _productRepository = productRepository;
         }
 
-       
+
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequestDTO request)
         {
@@ -117,6 +117,52 @@ namespace LearnAngular.API.Controllers
                 UpdatedDate = existingProduct.UpdatedDate,
                 IsActive = existingProduct.IsActive,
                 CreatedBy = existingProduct.CreatedBy
+            };
+
+            return Ok(response);
+        }
+        //PUT: api/products/{id}
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> UpdateProduct([FromRoute] Guid id, [FromBody] UpdateProductRequestDTO request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var existingProduct = await _productRepository.GetByIdAsync(id);
+           
+            if (existingProduct is null)
+            {
+                return NotFound($"Product with id {id} not found.");
+            }
+            //Update the existing product with the new values
+            existingProduct.Name = request.Name;
+            existingProduct.Description = request.Description;
+            existingProduct.Price = request.Price;
+            existingProduct.ImageUrl = request.ImageUrl;
+            existingProduct.UpdatedDate = DateTime.UtcNow; //Update the date to now
+            existingProduct.IsActive = request.IsActive;
+            
+            //Save changes to the database
+            var product = await _productRepository.UpdateAsync(existingProduct);
+
+            if(product is null)
+            {
+                return NotFound($"Product with id {id} not found.");
+            }   
+
+            var response = new ProductDTO
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                ImageUrl = product.ImageUrl,
+                CreatedDate = product.CreatedDate,
+                UpdatedDate = product.UpdatedDate,
+                IsActive = product.IsActive,
+                CreatedBy = product.CreatedBy
             };
 
             return Ok(response);

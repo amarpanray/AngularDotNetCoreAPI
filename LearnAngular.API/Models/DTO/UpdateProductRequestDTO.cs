@@ -2,9 +2,12 @@
 
 namespace LearnAngular.API.Models.DTO
 {
-    public class CreateProductRequestDTO
+    public class UpdateProductRequestDTO
     {
-        [Required(ErrorMessage ="Product name not provided.")]
+        [Required(ErrorMessage = "Valid GUID required for update operation.")]
+        public Guid Id { get; set; }
+
+        [Required(ErrorMessage = "Product name not provided.")]
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; }

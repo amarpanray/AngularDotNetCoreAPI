@@ -21,6 +21,20 @@ namespace LearnAngular.API.Repositories.Implementation
 
             return product;
         }
+
+        public async Task<Product?> UpdateAsync([FromBody] Product product)
+        {
+            var existingProduct = await dbContext.Products.FirstOrDefaultAsync(p => p.Id == product.Id);
+
+            if (existingProduct is not null)
+            {
+                dbContext.Entry(existingProduct).CurrentValues.SetValues(product);
+                await dbContext.SaveChangesAsync();
+                return  product;
+            }
+            
+            return null;
+        }
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             // return Task.FromResult<IEnumerable<Product>>(dbContext.Products.ToList());

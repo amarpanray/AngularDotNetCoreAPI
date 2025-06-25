@@ -7,6 +7,7 @@ namespace LearnAngular.API.Repositories.Interface
         Task<Product> CreateAsync(Product product);
         Task<IEnumerable<Product>> GetAllAsync();
         Task<Product?> GetByIdAsync(Guid id);
+        Task<Product?> UpdateAsync(Product product);
     }
 
       
