@@ -20,7 +20,7 @@ Also, this is a public repository, so feel free to use any parts of it for your 
 - Service Oriented Architecture
 - Dependency Injection
 - Repository Pattern
-- SQL (Microsoft) and NoSQL (Mongo)
+- SQL (Microsoft) and NoSQL (MongoDB)
 - Entity Framework Core (Code First)
 - local storage: SQLite
 - Angular/TypeScript
