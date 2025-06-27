@@ -13,21 +13,25 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Amar Added MongoDB settings and DbContext configuration
 var mongoDBSettings = builder.Configuration.GetSection("MongoDBSettings").Get<MongoDBSettings>();
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDBSettings"));
 builder.Services.AddDbContext<MongoDbContext>(options => 
 {
-    options.UseMongoDB(mongoDBSettings.AtlasURI ?? "", mongoDBSettings.DatabaseName ?? "");
+    options.UseMongoDB(mongoDBSettings.ConnectionURI ?? "", mongoDBSettings.DatabaseName ?? "");
 });
 // Enable CORS for all origins, methods, and headers
 // Add CORS policy to allow all origins, methods, and headers
 
-//Amar Panray's addition
+//Amar added SQL Server DbContext configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options => { 
     options.UseSqlServer(builder.Configuration.GetConnectionString("MarketDefaultConnection"));
 });
 
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
+ 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

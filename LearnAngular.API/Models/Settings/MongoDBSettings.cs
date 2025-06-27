@@ -2,8 +2,9 @@
 {
     public class MongoDBSettings
     {
-        public string AtlasURI { get; set; } = string.Empty;
-
-        public string DatabaseName { get; set; } = string.Empty;
+        public string ConnectionURI { get; set; } = null!;
+        public string DatabaseName { get; set; } = null!;
+        public string CollectionName { get; set; } = null!;
     }
+
 }

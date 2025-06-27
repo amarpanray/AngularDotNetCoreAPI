@@ -13,7 +13,7 @@ namespace LearnAngular.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        public IProductRepository _productRepository { get; }
+        private IProductRepository _productRepository { get; }
 
         //Same as above, but using a read-only property
         //public readonly IProductRepository ProductRepository;

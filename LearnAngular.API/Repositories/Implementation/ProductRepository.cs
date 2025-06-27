@@ -8,28 +8,28 @@ namespace LearnAngular.API.Repositories.Implementation
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly ApplicationDbContext _dbContext;
 
         public ProductRepository(ApplicationDbContext dbContext)
         {
-            this.dbContext = dbContext;
+            this._dbContext = dbContext;
         }
         public async Task<Product> CreateAsync([FromBody] Product product)
         {
-            await dbContext.Products.AddAsync(product);
-            await dbContext.SaveChangesAsync();
+            await _dbContext.Products.AddAsync(product);
+            await _dbContext.SaveChangesAsync();
 
             return product;
         }
 
         public async Task<Product?> UpdateAsync([FromBody] Product product)
         {
-            var existingProduct = await dbContext.Products.FirstOrDefaultAsync(p => p.Id == product.Id);
+            var existingProduct = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == product.Id);
 
             if (existingProduct is not null)
             {
-                dbContext.Entry(existingProduct).CurrentValues.SetValues(product);
-                await dbContext.SaveChangesAsync();
+                _dbContext.Entry(existingProduct).CurrentValues.SetValues(product);
+                await _dbContext.SaveChangesAsync();
                 return  product;
             }
             
@@ -38,12 +38,12 @@ namespace LearnAngular.API.Repositories.Implementation
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             // return Task.FromResult<IEnumerable<Product>>(dbContext.Products.ToList());
-            return await dbContext.Products.ToListAsync();
+            return await _dbContext.Products.ToListAsync();
         }
 
         public Task<Product?> GetByIdAsync(Guid id)
         {
-            return dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+            return _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }

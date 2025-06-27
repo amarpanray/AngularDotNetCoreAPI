@@ -3,6 +3,7 @@ using LearnAngular.API.Models.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Configuration;
+using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace LearnAngular.API.Data
 {
@@ -10,23 +11,21 @@ namespace LearnAngular.API.Data
     {
        // private readonly IConfiguration _configuration;
 
-        public DbSet<Customer> Customers { get; set; } = null!;
+      
+        public DbSet<User> Users { get; init; }
         public MongoDbContext(DbContextOptions<MongoDbContext> options/*, IConfiguration configuration*/) : base(options)
         {
-           // _configuration = configuration;
-
+            // _configuration = configuration;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-             modelBuilder.Entity<Customer>();
-            //modelBuilder.Entity<Customer>().HasKey(c => c.Id);
-            //modelBuilder.Entity<Customer>().Property(c => c.FirstName).IsRequired().HasMaxLength(50);
-            //modelBuilder.Entity<Customer>().Property(c => c.LastName).IsRequired().HasMaxLength(50);
-            //modelBuilder.Entity<Customer>().Property(c => c.Email).IsRequired().HasMaxLength(100);
+           
+            modelBuilder.Entity<User>().ToCollection("users");
+            //Add other MongoDB Collections here as needed
         }
+
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
