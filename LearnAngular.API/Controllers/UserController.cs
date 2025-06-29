@@ -1,5 +1,4 @@
 ﻿using LearnAngular.API.Models.DTO;
-using LearnAngular.API.Repositories.Implementation;
 using LearnAngular.API.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +15,33 @@ namespace LearnAngular.API.Controllers
              _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
+        //POST: api/users
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDTO request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            //Map Domain Object to Data Transfer Object (DTO)
+            var user = new Models.Domain.User
+            {
+                email = request.email,
+                name = request.name,
+            };
+            //Abstracting this task to the repository layer
+            //Unit of Work pattern
+            var savedUser = await _userRepository.CreateAsync(user);
+            //Map DTO back to Domain Object
+            var response = new UserDTO
+            {
+                id = savedUser._id,
+                email = savedUser.email,
+                name = savedUser.name,
+            };
+            return CreatedAtAction(nameof(GetAllUsers), new { id = response.id }, response);
+        }
+
         // GET: api/users
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
@@ -29,7 +55,7 @@ namespace LearnAngular.API.Controllers
                 response.Add(new UserDTO
                 {
                    email = user.email,  
-                   _id  = user._id,
+                   id  = user._id,
                    name = user.name,
                 });
             }

@@ -14,13 +14,17 @@ namespace LearnAngular.API.Controllers
     public class ProductsController : ControllerBase
     {
         private IProductRepository _productRepository { get; }
+        private readonly IUserRepository _userRepository;
 
         //Same as above, but using a read-only property
         //public readonly IProductRepository ProductRepository;
 
-        public ProductsController(IProductRepository productRepository)
+        public ProductsController(IProductRepository productRepository, IUserRepository userRepository)
         {
             _productRepository = productRepository;
+
+            //let's try to add a User to MongoDB
+            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
 
@@ -46,20 +50,20 @@ namespace LearnAngular.API.Controllers
 
             //Abstracting this task to the repository layer
             //Unit of Work pattern
-            await _productRepository.CreateAsync(product);
+            var savedProduct = await _productRepository.CreateAsync(product);
 
             //Map DTO back to Domain Object
             var response = new ProductDTO
             {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                ImageUrl = product.ImageUrl,
-                CreatedDate = product.CreatedDate,
-                UpdatedDate = product.UpdatedDate,
-                IsActive = product.IsActive,
-                CreatedBy = product.CreatedBy
+                Id = savedProduct.Id,
+                Name = savedProduct.Name,
+                Description = savedProduct.Description,
+                Price = savedProduct.Price,
+                ImageUrl = savedProduct.ImageUrl,
+                CreatedDate = savedProduct.CreatedDate,
+                UpdatedDate = savedProduct.UpdatedDate,
+                IsActive = savedProduct.IsActive,
+                CreatedBy = savedProduct.CreatedBy
             };
 
             return Ok(response);
@@ -145,24 +149,24 @@ namespace LearnAngular.API.Controllers
             existingProduct.IsActive = request.IsActive;
             
             //Save changes to the database
-            var product = await _productRepository.UpdateAsync(existingProduct);
+            var saveProduct = await _productRepository.UpdateAsync(existingProduct);
 
-            if(product is null)
+            if(saveProduct is null)
             {
                 return NotFound($"Product with id {id} not found.");
             }   
 
             var response = new ProductDTO
             {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                ImageUrl = product.ImageUrl,
-                CreatedDate = product.CreatedDate,
-                UpdatedDate = product.UpdatedDate,
-                IsActive = product.IsActive,
-                CreatedBy = product.CreatedBy
+                Id = saveProduct.Id,
+                Name = saveProduct.Name,
+                Description = saveProduct.Description,
+                Price = saveProduct.Price,
+                ImageUrl = saveProduct.ImageUrl,
+                CreatedDate = saveProduct.CreatedDate,
+                UpdatedDate = saveProduct.UpdatedDate,
+                IsActive = saveProduct.IsActive,
+                CreatedBy = saveProduct.CreatedBy
             };
 
             return Ok(response);

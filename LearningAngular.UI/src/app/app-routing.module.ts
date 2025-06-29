@@ -4,7 +4,14 @@ import { ProductIstComponent } from './features/product/product-ist/product-ist.
 import { AddProductComponent } from './features/product/add-product/add-product.component';
 import { EditProductComponent } from './features/product/edit-product/edit-product.component';
 
+import { UserListComponent } from './features/user/user-list/user-list.component';
+
+
 const routes: Routes = [{
+  path: 'admin/users',
+  component: UserListComponent
+},
+  {
   path:'admin/products',
   component:  ProductIstComponent
 },

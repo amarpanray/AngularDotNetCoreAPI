@@ -14,7 +14,7 @@ namespace LearnAngular.API.Repositories.Implementation
         {
             this._dbContext = dbContext;
         }
-        public async Task<Product> CreateAsync([FromBody] Product product)
+        public async Task<Product> CreateAsync(Product product)
         {
             await _dbContext.Products.AddAsync(product);
             await _dbContext.SaveChangesAsync();
@@ -22,7 +22,7 @@ namespace LearnAngular.API.Repositories.Implementation
             return product;
         }
 
-        public async Task<Product?> UpdateAsync([FromBody] Product product)
+        public async Task<Product?> UpdateAsync(Product product)
         {
             var existingProduct = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == product.Id);
 
