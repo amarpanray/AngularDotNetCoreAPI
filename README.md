@@ -25,6 +25,7 @@ Also, this is a public repository, so feel free to use any parts of it for your 
 - Object-Oriented Programming following the SOLID principles.
 - Service Oriented Architecture
 - Dependency Injection
+- JWT Authentication
 - Repository Pattern <br>
 
 **Data** <br>
