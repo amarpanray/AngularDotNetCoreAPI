@@ -61,7 +61,20 @@ onFormSubmit(): void
     });
   }
 
+  
 }
+    onDelete(): void{
+      if(this.id)
+      {
+        this.productService.deleteProduct(this.id)
+        .subscribe({
+          next: (response) =>{
+            this.router.navigateByUrl('admin/products');
+          }
+        })
+      }
+      
+    }
 
     ngOnDestroy(): void
     {

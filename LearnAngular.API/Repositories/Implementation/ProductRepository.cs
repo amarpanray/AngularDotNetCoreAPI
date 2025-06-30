@@ -30,9 +30,9 @@ namespace LearnAngular.API.Repositories.Implementation
             {
                 _dbContext.Entry(existingProduct).CurrentValues.SetValues(product);
                 await _dbContext.SaveChangesAsync();
-                return  product;
+                return product;
             }
-            
+
             return null;
         }
         public async Task<IEnumerable<Product>> GetAllAsync()
@@ -44,6 +44,31 @@ namespace LearnAngular.API.Repositories.Implementation
         public Task<Product?> GetByIdAsync(Guid id)
         {
             return _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+            if (product is not null)
+            {
+                _dbContext.Products.Remove(product);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
+        async Task<Product?> IProductRepository.DeleteAsync(Guid id)
+        {
+            var existingProduct = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (existingProduct is null)
+            { 
+                return null;
+            }
+
+            _dbContext.Products.Remove(existingProduct);
+            await _dbContext.SaveChangesAsync();
+
+            return existingProduct;
         }
     }
 }

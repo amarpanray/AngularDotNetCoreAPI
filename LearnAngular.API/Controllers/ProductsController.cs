@@ -3,6 +3,7 @@ using LearnAngular.API.Models.Domain;
 using LearnAngular.API.Models.DTO;
 using LearnAngular.API.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -135,7 +136,7 @@ namespace LearnAngular.API.Controllers
                 return BadRequest(ModelState);
             }
             var existingProduct = await _productRepository.GetByIdAsync(id);
-           
+
             if (existingProduct is null)
             {
                 return NotFound($"Product with id {id} not found.");
@@ -147,14 +148,14 @@ namespace LearnAngular.API.Controllers
             existingProduct.ImageUrl = request.ImageUrl;
             existingProduct.UpdatedDate = DateTime.UtcNow; //Update the date to now
             existingProduct.IsActive = request.IsActive;
-            
+
             //Save changes to the database
             var saveProduct = await _productRepository.UpdateAsync(existingProduct);
 
-            if(saveProduct is null)
+            if (saveProduct is null)
             {
                 return NotFound($"Product with id {id} not found.");
-            }   
+            }
 
             var response = new ProductDTO
             {
@@ -170,6 +171,27 @@ namespace LearnAngular.API.Controllers
             };
 
             return Ok(response);
+        }
+
+        //DELETE: api/products/{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
+        {
+            var deletedProduct = await _productRepository.DeleteAsync(id);
+            if (deletedProduct is null)
+            {
+                return NotFound($"Product with id {id} not found.");
+            }
+            
+            var response = new CreateProductRequestDTO
+            {
+                Name = deletedProduct.Name,
+                Description = deletedProduct.Description,
+               
+            };
+
+            return Ok(response);  
         }
     }
 }

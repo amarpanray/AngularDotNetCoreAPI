@@ -31,4 +31,10 @@ export class ProductService {
     {
       return this.http.put<Product>(`${environment.apiBaseUrl}/api/products/${id}`, editProductRequest)
     }
+
+  deleteProduct(id: string): Observable<Product>
+  {
+     return  this.http.delete<Product>(`${environment.apiBaseUrl}/api/products/${id}`)
+
+  }
 }
