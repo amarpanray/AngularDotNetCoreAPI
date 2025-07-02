@@ -15,7 +15,7 @@
                 <th>Name </th>
                 <th>Email </th>
                 <th>  </th>
-                 <th>  </th>
+                
             </tr></thead> 
             <tbody>  
                 <tr *ngFor="let user of users">
@@ -31,9 +31,7 @@
                      <td>
                        <a class="btn btn-light" [routerLink]="['/admin/user/', user.id]">Edit</a>
                     </td>
-                     <td>
-                       <a class="btn btn-light" [routerLink]="['/admin/user/', user.id]">Delete</a>
-                    </td>
+                    
                 </tr>
             </tbody>
         </table>
