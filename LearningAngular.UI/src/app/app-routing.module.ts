@@ -3,13 +3,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProductIstComponent } from './features/product/product-ist/product-ist.component';
 import { AddProductComponent } from './features/product/add-product/add-product.component';
 import { EditProductComponent } from './features/product/edit-product/edit-product.component';
-
+import { AddUserComponent } from './features/user/add-user/add-user.component';
 import { UserListComponent } from './features/user/user-list/user-list.component';
 
 
 const routes: Routes = [{
   path: 'admin/users',
   component: UserListComponent
+},
+{
+  path: 'admin/user/add',
+  component: AddUserComponent
 },
   {
   path:'admin/products',

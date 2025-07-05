@@ -14,9 +14,19 @@ export class AddUserComponent implements OnDestroy {
 model: AddUserRequest;
 private addUserSubscription?: Subscription;
  constructor(private userService: UserService, private router: Router)
-     {this.model = { name: '', description: '', id:'' };
+     {this.model = { name: '', email: '', id:'' };
     }
 
+    onFormSubmit(): void{ this.addUserSubscription = this.userService.addUser(this.model)
+    .subscribe({
+      next: (response) =>{
+      //  console.log('This was successful')
+        this.router.navigateByUrl('admin/users')
+      },
+      error: (error) =>{
+        console.log("An error has been detected.")
+      }
+    })}
     ngOnDestroy(): void {this.addUserSubscription?.unsubscribe();}
 
     }

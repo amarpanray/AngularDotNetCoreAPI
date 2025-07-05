@@ -1,6 +1,6 @@
  export interface AddUserRequest{
     name: string;
-    description: string;
+    email: string;
     id: string;
  }
  
