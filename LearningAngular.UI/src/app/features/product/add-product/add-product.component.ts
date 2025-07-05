@@ -22,6 +22,7 @@ export class AddProductComponent implements OnDestroy{
   };
  }
  
+ 
 onFormSubmit(){
    this.addProductSubscription = this.productService.addProduct(this.model)
     .subscribe({
@@ -30,7 +31,7 @@ onFormSubmit(){
         this.router.navigateByUrl('admin/products')
       },
       error: (error) =>{
-        console.log("Proper error handling needed here.")
+        console.log("An error has been detected.")
       }
     })
   }

@@ -24,7 +24,7 @@ constructor(private route: ActivatedRoute,
   {}
 
 ngOnInit(): void {
-  this.route.paramMap.subscribe({
+  this.paramsSubscription = this.route.paramMap.subscribe({
     next: (params) => {
     this.id =  params.get('id');
 
