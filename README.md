@@ -1,7 +1,7 @@
 # AngularDotNetCoreAPI
 
 # What
-The purpose of this application is to support my job search as a Tech Lead in quality software development.  It is a simple API that connects to a SQL database where you can create products and users. Think of a simple e-commerce platform that can be coupled with any UI. The .Net Core API and SQL databsase are hosted on Azure and the Angular UI on Firebase.
+This is a Minimum Viable product to support my job search as a Tech Lead in quality software development.  It is an API that connects to a SQL and NoSQL database where you can create products and users. Think of a simple e-commerce platform that can be coupled with any UI. The .Net Core API and SQL databsase are hosted on Azure, the NoSQL databsase on MongoDB and the Angular UI on Firebase.
 
 # Why
 I have been interviewed for some really interesting jobs lately, and by seemingly skilled developers no less. However, the amount of time I have had to deal with poor communication skills is more than I can count. I have been asked questions about things I use on a daily basis but had no idea what they were really asking. Some favored the memorization of syntax that is easily searchable over the discussion of concepts, strategies, approaches and evaluating my people skills. Others evaluated me over features that were not even in the scope of the applications they asked for. 
